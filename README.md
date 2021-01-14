@@ -1,2 +1,2 @@
-# nucapstone
+# NUCapstone
 Northwestern Capstone Project 
