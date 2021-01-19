@@ -23,15 +23,21 @@ def hello():
     outlet = [] 
     date = []
     links = []
+    img = []
     for item in trun:
         titles.append(item['title'])
         outlet.append(item['media'])
         date.append(item['date'])
         links.append(item['link'])
+        url  = item['link']
+        article = Article(url)
+        article.download()
+        article.parse()
+        img.append(article.top_image)
     
 
 
-    return render_template('hello.html',result= zip(titles,outlet,date,links)) 
+    return render_template('hello.html',result= zip(titles,outlet,date,links,img)) 
 
 
 
