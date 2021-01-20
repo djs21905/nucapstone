@@ -1,7 +1,5 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <!doctype html>
 <html lang="en">
   <head>
@@ -57,6 +55,20 @@
   </p>
 </main>
 
+
+<!-- Conservativer vs liberal bar -->
+{% if color == 0 %}
+<div class="progress">
+  <div class="progress-bar bg-danger" style="width:50%"></div>
+</div>
+</div>
+{%else%}
+<div class="progress">
+<div class="progress-bar bg-info" style="width:30%"></div>
+</div>
+{% endif %}
+
+
 <div class="container">
   <!-- Example row of columns -->
   <div class="row">
@@ -84,6 +96,8 @@
 
 
 <!-- Bootstrap core JavaScript
+
+  
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

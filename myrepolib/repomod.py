@@ -67,12 +67,13 @@ def test():
             print(result)
             labels = ['this worked']
             print(labels,result)
+        color = 0
 
 
       
 
             
-    return render_template('test.html', result= zip(result,labels))  #, prediction= round(pred_value * 100,2))
+    return render_template('test.html', result= zip(result,labels), color = color)  #, prediction= round(pred_value * 100,2))
 
 if __name__ == '__main__':
     app.run(debug=True)
