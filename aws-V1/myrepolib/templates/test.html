@@ -1,0 +1,111 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+  
+
+  <style>
+    .jumbotron {
+      background-color: rgb(255, 255, 255); 
+    }
+    </style>
+    </head>
+
+  <body class="text-center">
+    
+     
+    <div class="cover-container d-flex h-20 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto"><div class="jumbotron">
+        <div class="inner">
+            
+           <img src="https://i.ibb.co/zs6xh83/Screen-Shot-2021-01-19-at-4-04-37-PM.png" style="width:75x;height:75px;"> 
+        </div>
+        </div>
+      </header>
+      
+
+
+<main role="main" class="inner cover" >
+  <p class="lead">
+
+      <form method="POST" action="/test">
+          <div class="form-group">
+              <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL here.">
+              <br>
+              <input class = "btn btn-primary" type="submit" value="SUBMIT">
+          </div>
+      </form>
+  </p>
+</main>
+<!-- Conservativer vs liberal bar -->
+{% if color == 0 %}
+<div class="progress">
+  <div class="progress-bar bg-danger" style="width:50%"></div>
+</div>
+</div>
+{%else%}
+<div class="progress">
+<div class="progress-bar bg-info" style="width:30%"></div>
+</div>
+{% endif %}
+<!-- Result -->
+<main role="main" class="inner cover" >
+  <h1 class="cover-heading">Result</h1>
+<ul>{%for item,label in result%} 
+    <p> <b>{{label}}:</b> {{item}} </p>
+    {% endfor %} 
+  </ul>
+  <p class="lead">         
+  </p>
+</main>
+
+
+
+
+
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    {%for titles,outlet,date,links,img in result%} 
+    <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
+      <h4>{{titles}}</h4>
+      <img src= {{img}} style="width:300px;height:200px;"> 
+      <p><b>{{outlet}}</b></p>
+      <p><i>{{date}}</i></p>
+      <p><a class="btn btn-secondary" href='{{links}}' role="button">View article &raquo;</a></p>
+    </div>
+    {% endfor %} 
+  </div>
+
+<footer class="mastfoot mt-auto">
+  <div class="inner">
+    <br>
+    <br>
+    <p>Aperature.AI <a href="https://sps.northwestern.edu/masters/data-science/curriculum-specializations.php">Northwestern University</a>, by <a href="">Team 54</a>.</p>
+  </div>
+</footer>
+</div>
+
+
+
+
+<!-- Bootstrap core JavaScript
+
+  
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../assets/js/vendor/popper.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
