@@ -3,7 +3,8 @@ from google.cloud import automl_v1beta1
 from newspaper import Article
 from newspaper import Config
 from GoogleNews import GoogleNews
-
+import re
+import time
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ def hello():
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
-    googlenews=GoogleNews(start='01/19/2021',end='01/19/2021')
+    googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
     googlenews.search('news')
     result=googlenews.result()
 
@@ -46,14 +47,28 @@ def hello():
 def test():
     if request.method == 'POST':
         param1 =  request.form['Param1']
-        article = Article(param1)
-        article.download()
-        article.parse()
-        article.nlp()
-        article.text
-        text = article.text
-        result= [text]
-        labels = ['Text']
+        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+        if regex.match(param1):
+            article = Article(param1)
+            article.download()
+            article.parse()
+            article.nlp()
+            text = article.text
+            result= [text]
+            labels = ['url worked!']
+            print(labels,result)
+        else: 
+            user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+            config = Config()
+            config.browser_user_agent = user_agent
+            googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
+            googlenews.search(param1)
+            result=googlenews.result()
+            print(result)
+            labels = ['this worked']
+            print(labels,result)
+
+
       
 
             
