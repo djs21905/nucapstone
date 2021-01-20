@@ -21,7 +21,7 @@
   <body class="text-center">
     
      
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <div class="cover-container d-flex h-20 p-3 mx-auto flex-column">
       <header class="masthead mb-auto"><div class="jumbotron">
         <div class="inner">
             
@@ -44,18 +44,6 @@
       </form>
   </p>
 </main>
-
-<main role="main" class="inner cover" >
-  <h1 class="cover-heading">Result</h1>
-<ul>{%for item,label in result%} 
-    <p> <b>{{label}}:</b> {{item}} </p>
-    {% endfor %} 
-  </ul>
-  <p class="lead">         
-  </p>
-</main>
-
-
 <!-- Conservativer vs liberal bar -->
 {% if color == 0 %}
 <div class="progress">
@@ -67,6 +55,19 @@
 <div class="progress-bar bg-info" style="width:30%"></div>
 </div>
 {% endif %}
+<!-- Result -->
+<main role="main" class="inner cover" >
+  <h1 class="cover-heading">Result</h1>
+<ul>{%for item,label in result%} 
+    <p> <b>{{label}}:</b> {{item}} </p>
+    {% endfor %} 
+  </ul>
+  <p class="lead">         
+  </p>
+</main>
+
+
+
 
 
 <div class="container">
