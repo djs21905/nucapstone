@@ -2,21 +2,8 @@
 Northwestern Capstone Project 
 
 
-TOD
+<b>TODO </b>
 -Format output from url/keywords so it can be fed to model as input
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 COMPLETE
 
