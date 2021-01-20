@@ -9,5 +9,5 @@ Northwestern Capstone Project
 
 <b>COMPLETE</b>
 
--Implement logic for handling URL's and key terms. (1/20/2021)
+-Implement logic for handling URL's and key terms. (1/20/2021) <br>
 -Webserver functioning on AWS. (1/20/2021)
