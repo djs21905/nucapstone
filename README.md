@@ -18,7 +18,7 @@ Northwestern Capstone Project
 
 
 ubuntu commands:<br>
--run application ---> nohup python3 repomod.py <br>
-- find running apps --> ps -e | more <br>
+-run application ---> nohup python3 repomod.py <br><br>
+- find running apps --> ps -e | more <br><br>
 -find python  then sudo kill (python id)
 
