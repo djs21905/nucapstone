@@ -46,6 +46,7 @@ def hello():
 
 @app.route('/test', methods=["GET", "POST"])
 def test():
+    color = 0
     if request.method == 'POST':
         param1 =  request.form['Param1']
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
@@ -68,13 +69,13 @@ def test():
             print(result)
             labels = ['this worked']
             print(labels,result)
-        color = 0
+        
 
 
       
 
             
-    return render_template('test.html', result= zip(result,labels), color = color)  #, prediction= round(pred_value * 100,2))
+    return render_template('test.html', result= zip(result,labels), color = color) 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port= 8080)
