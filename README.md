@@ -22,3 +22,4 @@ run application ---> nohup python3 repomod.py <br>
 find running apps --> ps -e | more <br>
 find python  then sudo kill (python id)
 
+<img src = "https://i.ibb.co/g7XhDTB/Support-process-example.jpg">
