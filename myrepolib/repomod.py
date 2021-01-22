@@ -84,15 +84,19 @@ def test():
 
             print(len(trun))
             for item in trun:
-                titles1.append(item['title'])
-                outlet1.append(item['media'])
-                date1.append(item['date'])
-                links1.append(item['link'])
-                url1  = item['link']
-                article1 = Article(url1)
-                article1.download()
-                article1.parse()
-                img1.append(article1.top_image)
+                try:
+                    titles1.append(item['title'])
+                    outlet1.append(item['media'])
+                    date1.append(item['date'])
+                    links1.append(item['link'])
+                    url1  = item['link']
+                    article1 = Article(url1)
+                    article1.download()
+                    article1.parse()
+                    img1.append(article1.top_image)
+                except:
+                    pass
+           
            
                 
             
