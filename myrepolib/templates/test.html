@@ -31,7 +31,7 @@
       </header>
       
 
-
+<!-- Search Bar -->
 <main role="main" class="inner cover" >
   <p class="lead">
 
@@ -44,17 +44,10 @@
       </form>
   </p>
 </main>
-<!-- Conservativer vs liberal bar -->
-{% if color == 0 %}
-<div class="progress">
-  <div class="progress-bar bg-danger" style="width:50%"></div>
-</div>
-</div>
-{%else%}
-<div class="progress">
-<div class="progress-bar bg-info" style="width:30%"></div>
-</div>
-{% endif %}
+
+
+
+
 <!-- Result -->
 <main role="main" class="inner cover" >
   <h1 class="cover-heading">Result</h1>
@@ -63,23 +56,33 @@
     {% endfor %} 
   </ul>
   <p class="lead">         
-  </p>
+  </p> 
+  
 </main>
 
 
-
-
-
+<!-- Example row of columns -->
 <div class="container">
-  <!-- Example row of columns -->
   <div class="row">
-    {%for titles,outlet,date,links,img in result%} 
+    {%for titles1,outlet1,date1,links1,img1 in keywordprocess%} 
     <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
-      <h4>{{titles}}</h4>
-      <img src= {{img}} style="width:300px;height:200px;"> 
-      <p><b>{{outlet}}</b></p>
-      <p><i>{{date}}</i></p>
-      <p><a class="btn btn-secondary" href='{{links}}' role="button">View article &raquo;</a></p>
+      <h4>{{titles1}}</h4>
+      <img src= {{img1}} style="width:300px;height:200px;"> 
+      <p><b>{{outlet1}}</b></p>
+      <p><i>{{date1}}</i></p>
+<!-- Conservativer vs liberal bar -->
+    {% if color == 0 %}
+    <div class="progress">
+      <div class="progress-bar bg-danger" style="width:50%"></div>
+    </div>
+    </div>
+    {%else%}
+    <div class="progress">
+    <div class="progress-bar bg-info" style="width:30%"></div>
+    </div>
+    {% endif %}
+<!-- View Alternatives -->
+    <p><a class="btn btn-secondary" href='{{links1}}' role="button">Get another viewpoint &raquo;</a></p>
     </div>
     {% endfor %} 
   </div>

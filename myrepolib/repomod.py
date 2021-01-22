@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request
-from google.cloud import automl_v1beta1
 from newspaper import Article
 from newspaper import Config
 from GoogleNews import GoogleNews
 import re
 import time
+import nltk
+
+nltk.download('punkt')
 
 app = Flask(__name__)
 
@@ -45,6 +47,12 @@ def hello():
 
 @app.route('/test', methods=["GET", "POST"])
 def test():
+    titles1 = []
+    outlet1 = [] 
+    date1 = []
+    links1 = []
+    img1 = []
+  
     if request.method == 'POST':
         param1 =  request.form['Param1']
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
@@ -64,16 +72,31 @@ def test():
             googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
             googlenews.search(param1)
             result=googlenews.result()
-            print(result)
             labels = ['this worked']
-            print(labels,result)
-        color = 0
-
-
-      
+         
 
             
-    return render_template('test.html', result= zip(result,labels), color = color)  #, prediction= round(pred_value * 100,2))
+            # keyword process flow 
+            if len(result) <= 6:
+                trun = result[0:]
+            else:
+                trun = result[0:6]
+
+            print(len(trun))
+            for item in trun:
+                titles1.append(item['title'])
+                outlet1.append(item['media'])
+                date1.append(item['date'])
+                links1.append(item['link'])
+                url1  = item['link']
+                article1 = Article(url1)
+                article1.download()
+                article1.parse()
+                img1.append(article1.top_image)
+           
+                
+            
+    return render_template('test.html', result= zip(result,labels), keywordprocess = zip(titles1,outlet1,date1,links1,img1)) 
 
 if __name__ == '__main__':
     app.run(debug=True)
