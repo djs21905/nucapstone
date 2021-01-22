@@ -6,6 +6,9 @@ Northwestern Capstone Project
 <br>
 -Format output from url/keywords so it can be fed to model as input
 <br>
+-Clicking logo should take you to homepage
+<br>
+-Handling news articles that don't have images (maybe a stock photo?)
 
 <b>COMPLETE</b>
 
