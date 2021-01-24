@@ -27,7 +27,7 @@
       <header class="masthead mb-auto"><div class="jumbotron">
         <div class="inner">
             
-           <img src="https://i.ibb.co/zs6xh83/Screen-Shot-2021-01-19-at-4-04-37-PM.png" style="width:75x;height:75px;"> 
+           <img src="https://i.ibb.co/TrNwvrh/logo.png"> 
         </div>
         </div>
       </header>
@@ -38,7 +38,7 @@
 
             <form method="POST" action="/test">
                 <div class="form-group">
-                    <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL here.">
+                    <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL or keyword here.">
                     <br>
                     <input class = "btn btn-primary" type="submit" value="SUBMIT">
                 </div>
@@ -52,7 +52,7 @@
           {%for titles,outlet,date,links,img in result%} 
           <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
             <h4>{{titles}}</h4>
-            <img src= {{img}} style="width:300px;height:200px;"> 
+            <a href="{{links}}"><img src= {{img}} style="width:300px;height:200px;" title="{{outlet}}"> </a>
             <p><b>{{outlet}}</b></p>
             <p><i>{{date}}</i></p>
             <p><a class="btn btn-secondary" href='{{links}}' role="button">View article &raquo;</a></p>

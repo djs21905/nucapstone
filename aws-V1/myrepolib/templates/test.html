@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -25,7 +26,9 @@
       <header class="masthead mb-auto"><div class="jumbotron">
         <div class="inner">
             
-           <img src="https://i.ibb.co/zs6xh83/Screen-Shot-2021-01-19-at-4-04-37-PM.png" style="width:75x;height:75px;"> 
+
+          <!-- Website logo -->
+           <a href="/"> <img src="https://i.ibb.co/TrNwvrh/logo.png"> </a>
         </div>
         </div>
       </header>
@@ -37,7 +40,7 @@
 
       <form method="POST" action="/test">
           <div class="form-group">
-              <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL here.">
+              <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL or keyword here.">
               <br>
               <input class = "btn btn-primary" type="submit" value="SUBMIT">
           </div>
@@ -48,26 +51,13 @@
 
 
 
-<!-- Result -->
-<main role="main" class="inner cover" >
-  <h1 class="cover-heading">Result</h1>
-<ul>{%for item,label in result%} 
-    <p> <b>{{label}}:</b> {{item}} </p>
-    {% endfor %} 
-  </ul>
-  <p class="lead">         
-  </p> 
-  
-</main>
-
-
 <!-- Example row of columns -->
 <div class="container">
   <div class="row">
     {%for titles1,outlet1,date1,links1,img1 in keywordprocess%} 
     <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
       <h4>{{titles1}}</h4>
-      <img src= {{img1}} style="width:300px;height:200px;"> 
+      <a href="{{links1}}"><img src= {{img1}} alt="Image Not Found" onerror=this.src="https://image.freepik.com/free-vector/breaking-news-template_23-2148507392.jpg" style="width:300px;height:200px;" title="{{outlet1}}"> </a>
       <p><b>{{outlet1}}</b></p>
       <p><i>{{date1}}</i></p>
 <!-- Conservativer vs liberal bar -->
@@ -82,6 +72,7 @@
     </div>
     {% endif %}
 <!-- View Alternatives -->
+    <br>
     <p><a class="btn btn-secondary" href='{{links1}}' role="button">Get another viewpoint &raquo;</a></p>
     </div>
     {% endfor %} 
