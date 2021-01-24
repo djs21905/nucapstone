@@ -18,6 +18,7 @@ def hello():
     googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
     googlenews.search('news')
     result=googlenews.result()
+    print(len(result))
 
 
     trun = result[0:3]
@@ -62,9 +63,13 @@ def test():
             article.parse()
             article.nlp()
             text = article.text
-            result= [text]
-            labels = ['url worked!']
-            print(labels,result)
+            
+
+            titles1.append(article.title)
+            outlet1.append(re.split('www.|.com',param1)[1].upper())
+            date1.append(str(article.publish_date)[0:16])
+            links1.append(param1)
+            img1.append(article.top_image)
         else: 
             user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
             config = Config()
@@ -72,7 +77,7 @@ def test():
             googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
             googlenews.search(param1)
             result=googlenews.result()
-            labels = ['this worked']
+          
          
 
             
@@ -100,7 +105,7 @@ def test():
            
                 
             
-    return render_template('test.html', result= zip(result,labels), keywordprocess = zip(titles1,outlet1,date1,links1,img1)) 
+    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1)) 
 
 if __name__ == '__main__':
     app.run(debug=True)
