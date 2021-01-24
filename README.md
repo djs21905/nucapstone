@@ -6,7 +6,7 @@ Northwestern Capstone Project
 <br>
 -Format output from url/keywords so it can be fed to model as input
 <br>
-URLs are having trouble returning the time an article was posted.  
+-URLs are having trouble returning the time an article was posted.  
 <br>
 
 <b>COMPLETE</b>
