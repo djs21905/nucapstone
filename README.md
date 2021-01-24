@@ -17,8 +17,8 @@ Northwestern Capstone Project
 -Website logo updated and spelling corrected. (1/24/2021) <br>
 -Clicking on a news article image will take you to the link. (1/24/2021) <br>
 -Hovering over an image now shows a tooltip with the news outlet. (1/24/2021) <br>
-- CSS styling bug updated.  Text on /test page now displays bold header with proper sizing (1/24/2021) <br>
-- Functionality for url search now fully works. (1/24/2021)  <br>
+-CSS styling bug updated.  Text on /test page now displays bold header with proper sizing (1/24/2021) <br>
+-Functionality for url search now fully works. (1/24/2021)  <br>
 
 <br>
 <br>
