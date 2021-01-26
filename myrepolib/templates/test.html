@@ -54,7 +54,7 @@
 <!-- Example row of columns -->
 <div class="container">
   <div class="row">
-    {%for titles1,outlet1,date1,links1,img1 in keywordprocess%} 
+    {%for titles1,outlet1,date1,links1,img1,hash in keywordprocess%} 
     <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
       <h4>{{titles1}}</h4>
       <a href="{{links1}}"><img src= {{img1}} alt="Image Not Found" onerror=this.src="https://image.freepik.com/free-vector/breaking-news-template_23-2148507392.jpg" style="width:300px;height:200px;" title="{{outlet1}}"> </a>
@@ -71,10 +71,22 @@
     <div class="progress-bar bg-info" style="width:30%"></div>
     </div>
     {% endif %}
-<!-- View Alternatives -->
+    <!-- voting system -->
     <br>
-    <p><a class="btn btn-secondary" href='{{links1}}' role="button">Get another viewpoint &raquo;</a></p>
+    <form method="POST" action="/result">
+      <div class="form-group">
+          <input type="submit" class="btn btn-outline-primary" id="liberal" name="vote" value="Liberal" >
+          <input type="submit" class="btn btn-outline-secondary" id="middle" name="vote" value="Middle" >
+          <input type="submit" class="btn btn-outline-danger" id="conservative" name="vote" value = "Conservative"> 
+          <input type="hidden" id="pk" name="pk" value={{hash}}>
+      </div>
+  </form>
+    
+    <br>
+<!-- View Alternatives -->
+  
     </div>
+
     {% endfor %} 
   </div>
 
