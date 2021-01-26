@@ -8,6 +8,7 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
+-Create database to store votes.<br>
 
 <b>COMPLETE</b>
 
@@ -19,6 +20,7 @@ Northwestern Capstone Project
 -CSS styling bug updated.  Text on /test page now displays bold header with proper sizing (1/24/2021) <br>
 -Functionality for url search now fully works. (1/24/2021)  <br>
 -A stock image now appears whenever a news article does not have an image associated with it. (1/24/2021) <br> 
+-added voting functionality <br>
 
 <br>
 <br>
