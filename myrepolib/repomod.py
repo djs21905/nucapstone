@@ -8,9 +8,23 @@ import nltk
 import hashlib
 from ip2geotools.databases.noncommercial import DbIpCity
 import psycopg2
+import pandas as pd
+#Text cleaning
+from text_cleaner import text_cleaner
+
+
+#NTLK
+from nltk.corpus import stopwords  # stopwords
+from nltk.stem.porter import PorterStemmer #Stemming
+from nltk.stem import WordNetLemmatizer # Lemmatization
+import re, string #Text cleaning
+
+
 
 
 nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 app = Flask(__name__)
 
@@ -58,11 +72,17 @@ def test():
     links1 = []
     img1 = []
     hash = []
+    article_text = []
+
+    
+    STOPWORDS = stopwords.words('english')
+    STOPWORDS = [word.translate(str.maketrans('','',string.punctuation)) for word in STOPWORDS] # 
+    LEMMING =  WordNetLemmatizer()
   
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
-        response = DbIpCity.get('61.555.51.123', api_key='free')
+        response = DbIpCity.get('67.240.51.115', api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
 
@@ -97,6 +117,7 @@ def test():
             date1.append(str(article.publish_date)[0:16])
             links1.append(param1)
             img1.append(article.top_image)
+            article_text.append(text)
         else: 
             user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
             config = Config()
@@ -104,6 +125,8 @@ def test():
             googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
             googlenews.search(param1)
             result=googlenews.result()
+
+            
           
          
 
@@ -122,6 +145,14 @@ def test():
                     date1.append(item['date'])
                     links1.append(item['link'])
                     url1  = item['link']
+                    #extract text
+                    article = Article(item['link'])
+                    article.download()
+                    article.parse()
+                    article.nlp()
+                    text = article.text
+                    article_text.append(text)
+                    #End of article text extraction
                     article1 = Article(url1)
                     article1.download()
                     article1.parse()
@@ -133,7 +164,27 @@ def test():
             hash_object = hashlib.sha1(item.encode('utf-8'))
             hex_dig = hash_object.hexdigest()  
             hash.append(hex_dig)
+        
+        #model input. Dataframe containing article content
+        uncleansed_data = pd.DataFrame({'content':article_text}) 
+        print(uncleansed_data)
+        uncleansed_data['simple_clean'] = text_cleaner(uncleansed_data['content'])
+        print(uncleansed_data)
 
+        # add stopword clean
+        uncleansed_data['stopwords_clean'] =  text_cleaner(uncleansed_data['simple_clean'],
+                          SIMPLE = False,
+                          STOPWORDS = STOPWORDS)
+
+        print(uncleansed_data)
+        # add lemming clean 
+        uncleansed_data['lemming_clean'] =  text_cleaner(uncleansed_data['stopwords_clean'],
+                          SIMPLE = False,
+                          LEMMING = LEMMING)
+        print(uncleansed_data)
+
+
+        #PLUG MODEL IN HERE
             
     return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash)) 
 
