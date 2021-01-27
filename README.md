@@ -10,7 +10,7 @@ Northwestern Capstone Project
 <br>
 -Create database to store votes.<br>
 -Add data cleaning function into backend.  <br>
--Look into pulling ip information for posts
+-Look into pulling ip information for posts (in progress 1/27/2021 - dan)
 
 <b>COMPLETE</b>
 
