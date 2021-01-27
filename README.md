@@ -9,6 +9,7 @@ Northwestern Capstone Project
 -URLs are having trouble returning the time an article was posted.  
 <br>
 -Create database to store votes.<br>
+-Add data cleaning function into backend.  
 
 <b>COMPLETE</b>
 
