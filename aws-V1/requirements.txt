@@ -13,4 +13,5 @@ flask
 newspaper3k
 GoogleNews
 ip2geotools
+psycopg2
 
