@@ -7,6 +7,8 @@ import time
 import nltk
 import hashlib
 from ip2geotools.databases.noncommercial import DbIpCity
+import psycopg2
+
 
 nltk.download('punkt')
 
@@ -58,11 +60,29 @@ def test():
     hash = []
   
     if request.method == 'POST':
+
         param1 =  request.form['Param1']
-        #handles ip loggin with keyword search
-        response = DbIpCity.get('', api_key='free')
+        response = DbIpCity.get('61.555.51.123', api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
-        
+
+
+        #establish db connection 
+        con = psycopg2.connect("dbname=capstone user=postgres password=admin host=localhost port=5432")
+        print('Connecting to PostgreSQL db.....')
+
+        cur = con.cursor()
+
+        print('DB connection successful ')
+        region = response.region
+
+        postgres_insert_query = """ INSERT INTO info (ip, url, location) VALUES (%s,%s,%s)"""
+        record_to_insert = (str(request.remote_addr), param1, str(response.region))
+        cur.execute(postgres_insert_query, record_to_insert)
+
+        con.commit()
+        con.close()
+
+
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         if regex.match(param1):
             article = Article(param1)
