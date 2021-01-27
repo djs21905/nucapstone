@@ -58,6 +58,10 @@ def test():
   
     if request.method == 'POST':
         param1 =  request.form['Param1']
+        #handles ip loggin with keyword search
+        response = DbIpCity.get('', api_key='free')
+        print(request.remote_addr,param1,response.country,response.region)
+        
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         if regex.match(param1):
             article = Article(param1)
