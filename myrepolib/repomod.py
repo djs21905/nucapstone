@@ -6,6 +6,7 @@ import re
 import time
 import nltk
 import hashlib
+from ip2geotools.databases.noncommercial import DbIpCity
 
 nltk.download('punkt')
 
