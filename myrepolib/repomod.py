@@ -87,7 +87,7 @@ def test():
 
 
         #establish db connection 
-        con = psycopg2.connect("dbname=capstone user=postgres password=admin host=localhost port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....')
 
         cur = con.cursor()
@@ -192,18 +192,44 @@ def test():
 @app.route('/result', methods=["GET", "POST"])
 def result():
     if request.method == 'POST':
-        print(request.form.get('pk'))
+        hash_id = request.form.get('pk')
+        print(hash_id)
+        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
+        print('Connecting to PostgreSQL db.....') 
+        cur = con.cursor()
+        print('DB connection successful ')
+        fail = False
         if request.form['vote'] == 'Liberal':
             a = 'liberal'
-        elif request.form['vote'] == 'Middle':
-            a = 'middle'
+            try:
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 1,0,hash_id)
+                cur.execute(postgres_insert_query, record_to_insert)
+                message = 'You voted that the article should be rated as more liberal than our model ranking. Thanks for the input.'
+            except:
+                fail = True
+                message = 'You already voted for this article. You can only vote once per article.'
+                pass  
+        #elif request.form['vote'] == 'Middle':
+            #a = 'middle'
+            #message = 'You agreed with our models ranking. Thanks for the input.'
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
-            
+            try:
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id))
+                cur.execute(postgres_insert_query, record_to_insert)
+                message = 'You voted that the article should be rated as more conservative than our model ranking. Thanks for the input.'
+            except:
+                fail = True
+                message = 'You already voted for this article. You can only vote once per article.'
+                pass
+        con.commit()
+        con.close()    
      
      
 
-    return render_template('vote.html',test=a) 
+    return render_template('vote.html',test=a,message=message,fail = fail) 
 
 
 

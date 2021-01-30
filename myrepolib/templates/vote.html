@@ -23,11 +23,11 @@
   <body class="text-center">
     
      
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <div class="cover-container d-flex h-20 p-3 mx-auto flex-column">
       <header class="masthead mb-auto"><div class="jumbotron">
         <div class="inner">
             
-           <img src="https://i.ibb.co/TrNwvrh/logo.png"> 
+          <a href="/"> <img src="https://i.ibb.co/TrNwvrh/logo.png"> </a>
         </div>
         </div>
       </header>
@@ -36,7 +36,28 @@
       <main role="main" class="inner cover" >
         <p class="lead">
 
-         <h1>{{test}}</h1>
+          <form method="POST" action="/test">
+            <div class="form-group">
+                <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL or keyword here.">
+                <br>
+                <input class = "btn btn-primary" type="submit" value="SUBMIT">
+            </div>
+        </form>
+    </p>
+  </main>
+  
+
+      {% if fail is sameas true %}
+      <div class="alert alert-danger">
+        <p> <b>{{message}}</b></p>
+      </div>
+      {%else%}
+      <div class="alert alert-info">
+      
+        <p> <b>{{message}}</b></p>
+
+      </div>
+      {%endif%}
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
