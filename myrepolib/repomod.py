@@ -82,7 +82,7 @@ def test():
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
-        response = DbIpCity.get('67.240.51.115', api_key='free')
+        response = DbIpCity.get('', api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
 
