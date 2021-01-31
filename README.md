@@ -8,6 +8,7 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
+-add a message if the search does return anything.
 
 
 <b>COMPLETE</b>
