@@ -4,10 +4,11 @@ Northwestern Capstone Project
 
 <b>TODO </b>
 <br>
--Format output from url/keywords so it can be fed to model as input
+-deploy model and app to vpc. Create postgres db in AWS.
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
+
 
 <b>COMPLETE</b>
 
@@ -19,7 +20,10 @@ Northwestern Capstone Project
 -CSS styling bug updated.  Text on /test page now displays bold header with proper sizing (1/24/2021) <br>
 -Functionality for url search now fully works. (1/24/2021)  <br>
 -A stock image now appears whenever a news article does not have an image associated with it. (1/24/2021) <br> 
-
+-added voting functionality <br>
+-Create database to store votes.<br>
+-Add data cleaning function into backend.  <br>
+-Look into pulling ip information for posts 
 <br>
 <br>
 

@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from newspaper import Article
 from newspaper import Config
 from GoogleNews import GoogleNews
 import re
 import time
 import nltk
+import hashlib
 
 nltk.download('punkt')
 
@@ -53,6 +54,7 @@ def test():
     date1 = []
     links1 = []
     img1 = []
+    hash = []
   
     if request.method == 'POST':
         param1 =  request.form['Param1']
@@ -102,10 +104,30 @@ def test():
                 except:
                     pass
            
-           
-                
+        for item in titles1:
+            hash_object = hashlib.sha1(item.encode('utf-8'))
+            hex_dig = hash_object.hexdigest()  
+            hash.append(hex_dig)
+
             
-    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1)) 
+    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash)) 
+
+
+@app.route('/result', methods=["GET", "POST"])
+def result():
+    if request.method == 'POST':
+        print(request.form.get('pk'))
+        if request.form['vote'] == 'Liberal':
+            a = 'liberal'
+        elif request.form['vote'] == 'Middle':
+            a = 'middle'
+        elif request.form['vote'] == 'Conservative':
+            a = 'conservative'
+            
+     
+     
+
+    return render_template('vote.html',test=a) 
 
 
 
