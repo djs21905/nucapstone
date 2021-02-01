@@ -9,7 +9,7 @@ Northwestern Capstone Project
 -URLs are having trouble returning the time an article was posted.  
 <br>
 -add a message if the search doesnt return anything.<br>
--add tooltip to consrvative liberal buttons that explains meaning to users <br>
+
 
 
 
@@ -28,6 +28,7 @@ Northwestern Capstone Project
 -Add data cleaning function into backend.  <br>
 -Look into pulling ip information for posts 
 <br>
+-add tooltip to consrvative liberal buttons that explains meaning to users <br>
 <br>
 
 
