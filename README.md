@@ -8,6 +8,7 @@ Northwestern Capstone Project
 -URLs are having trouble returning the time an article was posted.  
 <br>
 -add a message if the search doesnt return anything.<br>
+-connect model to backend.
 
 
 
@@ -29,8 +30,8 @@ Northwestern Capstone Project
 <br>
 -add tooltip to consrvative liberal buttons that explains meaning to users <br>
 <br>
--db functioning. Added date/time and isurl columns <br> 
--deploy model and app to vpc. Create postgres db in AWS. <br>
+-db functioning. Added date/time and isurl columns <br> (2/1/2021)
+-deploy model and app to vpc. Create postgres db in AWS. <br> (2/1/2021)
 
 
 
