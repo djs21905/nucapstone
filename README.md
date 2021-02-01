@@ -30,7 +30,7 @@ Northwestern Capstone Project
 <br>
 -add tooltip to consrvative liberal buttons that explains meaning to users <br>
 <br>
--db functioning. Added date/time and isurl columns <br> (2/1/2021)
+-db functioning. Added date/time and isurl columns(2/1/2021) <br> 
 -deploy model and app to vpc. Create postgres db in AWS. <br> (2/1/2021)
 
 
