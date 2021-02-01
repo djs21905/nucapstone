@@ -75,9 +75,9 @@
     <br>
     <form method="POST" action="/result">
       <div class="form-group">
-          <input type="submit" class="btn btn-outline-primary" id="liberal" name="vote" value="Liberal" >
-          <input type="submit" class="btn btn-outline-secondary" id="middle" name="vote" value="Middle" >
-          <input type="submit" class="btn btn-outline-danger" id="conservative" name="vote" value = "Conservative"> 
+          <input type="submit" class="btn btn-outline-primary" id="liberal" name="vote" value="Liberal"title="Click this button if you think the article should be rated more liberal than our model rating." >
+          <!--<input type="submit" class="btn btn-outline-secondary" id="middle" name="vote" value="Middle" > -->
+          <input type="submit" class="btn btn-outline-danger" id="conservative" name="vote" value = "Conservative" title="Click this button if you think the article should be rated more conservative than our model rating."> 
           <input type="hidden" id="pk" name="pk" value={{hash}}>
       </div>
   </form>
