@@ -43,3 +43,5 @@ find python  then sudo kill (python id) <br>
 command for installing psycopg2 -- > sudo apt-get install libpq-dev python-dev
 
 <img src = "https://i.ibb.co/g7XhDTB/Support-process-example.jpg">
+
+<img src = Aperture.AI.png>
