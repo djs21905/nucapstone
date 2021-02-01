@@ -8,7 +8,9 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
--add a message if the search does return anything.
+-add a message if the search doesnt return anything.<br>
+-add tooltip to consrvative liberal buttons that explains meaning to users <br>
+
 
 
 <b>COMPLETE</b>
