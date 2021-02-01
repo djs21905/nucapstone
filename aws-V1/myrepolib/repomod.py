@@ -221,7 +221,7 @@ def result():
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date) VALUES (%s,%s,%s,%s,%s,%s)"""
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
                 record_to_insert = (str(request.remote_addr), 0,1,str(hash_id),datetime.datetime.now(),datetime.datetime.now().time())
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more conservative than our model ranking. Thanks for the input.'
