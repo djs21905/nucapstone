@@ -4,7 +4,6 @@ Northwestern Capstone Project
 
 <b>TODO </b>
 <br>
--deploy model and app to vpc. Create postgres db in AWS.
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
@@ -30,12 +29,16 @@ Northwestern Capstone Project
 <br>
 -add tooltip to consrvative liberal buttons that explains meaning to users <br>
 <br>
+-db functioning. Added date/time and isurl columns <br> 
+-deploy model and app to vpc. Create postgres db in AWS. <br>
+
 
 
 
 ubuntu commands:<br>
 run application ---> nohup python3 repomod.py <br>
 find running apps --> ps -e | more <br>
-find python  then sudo kill (python id)
+find python  then sudo kill (python id) <br>
+command for installing psycopg2 -- > sudo apt-get install libpq-dev python-dev
 
 <img src = "https://i.ibb.co/g7XhDTB/Support-process-example.jpg">
