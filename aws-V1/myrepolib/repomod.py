@@ -84,7 +84,7 @@ def test():
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
-        response = DbIpCity.get(str(request.remote_add), api_key='free')
+        response = DbIpCity.get(str(request.remote_addr), api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
