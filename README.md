@@ -8,7 +8,8 @@ Northwestern Capstone Project
 -URLs are having trouble returning the time an article was posted.  
 <br>
 -add a message if the search doesnt return anything.<br>
--connect model to backend.
+-connect model to backend. <br>
+--add andrew to security group on aws 
 
 
 
