@@ -11,7 +11,10 @@ import psycopg2
 import pandas as pd
 #Text cleaning
 from text_cleaner import text_cleaner
-import datetime
+import sys
+
+
+from predict_against_model import load_model, load_vocabulary, predict_results
 
 
 #NTLK
@@ -21,7 +24,7 @@ from nltk.stem import WordNetLemmatizer # Lemmatization
 import re, string #Text cleaning
 
 
-
+#print(("<b>Current Python Version Used:</b> Python " +  sys.version.split('(')[0].strip()))
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -42,7 +45,6 @@ def hello():
 
     trun = result[0:3]
 
-    
     titles = []
     outlet = [] 
     date = []
@@ -80,35 +82,32 @@ def test():
     STOPWORDS = stopwords.words('english')
     STOPWORDS = [word.translate(str.maketrans('','',string.punctuation)) for word in STOPWORDS] # 
     LEMMING =  WordNetLemmatizer()
-    
+  
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
         response = DbIpCity.get(str(request.remote_addr), api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
-        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+
         #establish db connection 
-        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....')
 
         cur = con.cursor()
 
         print('DB connection successful ')
         region = response.region
-        date = datetime.datetime.now()  
 
-        if regex.match(param1):
-            isurl = True
-        else:
-            isurl = False
-        postgres_insert_query = """ INSERT INTO info (ip, url, location, date,time,isurl) VALUES (%s,%s,%s,%s,%s,%s)"""
-        record_to_insert = (str(request.remote_addr), param1, str(response.region),date,datetime.datetime.now().time(),isurl)
+        postgres_insert_query = """ INSERT INTO info (ip, url, location) VALUES (%s,%s,%s)"""
+        record_to_insert = (str(request.remote_addr), param1, str(response.region))
         cur.execute(postgres_insert_query, record_to_insert)
 
         con.commit()
         con.close()
-        
+
+
+        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         if regex.match(param1):
             article = Article(param1)
             article.download()
@@ -171,7 +170,7 @@ def test():
             hash.append(hex_dig)
         
         #model input. Dataframe containing article content
-        uncleansed_data = pd.DataFrame({'content':article_text}) 
+        '''uncleansed_data = pd.DataFrame({'content':article_text}) 
         print(uncleansed_data)
         uncleansed_data['simple_clean'] = text_cleaner(uncleansed_data['content'])
         print(uncleansed_data)
@@ -186,12 +185,33 @@ def test():
         uncleansed_data['lemming_clean'] =  text_cleaner(uncleansed_data['stopwords_clean'],
                           SIMPLE = False,
                           LEMMING = LEMMING)
-        print(uncleansed_data)
+        print(uncleansed_data)'''
 
+        #Clean Text 
+        cleaned_text = []
+        for item in article_text:    
+            cleanse = text_cleaner(item)
+            cleanse2 = cleanse.pop()
+            print(cleanse2)
+            cleaned_text.append(cleanse2)
+        print(cleaned_text)
 
-        #PLUG MODEL IN HERE
+        model_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\models\content_Transformer_model'
+        vocabulary_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\Data\word_frequency\content_word_map_dict.json'
+
+        model = load_model(model_path)
+        vocab = load_vocabulary(vocabulary_path)
+
+        #Model Prediction based on cleaned text
+        model_results = []
+        for text in cleaned_text:   
+            prediction = predict_results(text,model,vocab)
+            #remove nested list
+            prediction_pop = list(prediction).pop()
+            scaled_prediction = (prediction_pop * 50 ) + 50
+            model_results.append(list(scaled_prediction).pop())
             
-    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash)) 
+    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
 
 
 @app.route('/result', methods=["GET", "POST"])
@@ -199,7 +219,7 @@ def result():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
         print(hash_id)
-        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....') 
         cur = con.cursor()
         print('DB connection successful ')
@@ -207,8 +227,8 @@ def result():
         if request.form['vote'] == 'Liberal':
             a = 'liberal'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 1,0,str(hash_id),datetime.datetime.now(),datetime.datetime.now().time())
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 1,0,hash_id)
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more liberal than our model ranking. Thanks for the input.'
             except:
@@ -221,8 +241,8 @@ def result():
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id),datetime.datetime.now(),datetime.datetime.now().time())
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id))
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more conservative than our model ranking. Thanks for the input.'
             except:
@@ -235,6 +255,7 @@ def result():
      
 
     return render_template('vote.html',test=a,message=message,fail = fail) 
+
 
 
 
