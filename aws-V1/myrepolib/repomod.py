@@ -91,7 +91,7 @@ def test():
 
 
         #establish db connection 
-        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....')
 
         cur = con.cursor()
@@ -219,7 +219,7 @@ def result():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
         print(hash_id)
-        con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....') 
         cur = con.cursor()
         print('DB connection successful ')
