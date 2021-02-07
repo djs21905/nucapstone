@@ -196,8 +196,8 @@ def test():
             cleaned_text.append(cleanse2)
         print(cleaned_text)
 
-        model_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\models\content_Transformer_model'
-        vocabulary_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\Data\word_frequency\content_word_map_dict.json'
+        model_path = 'models\content_Transformer_model'
+        vocabulary_path = 'Data\word_frequency\content_word_map_dict.json'
 
         model = load_model(model_path)
         vocab = load_vocabulary(vocabulary_path)
