@@ -14,4 +14,4 @@ newspaper3k
 GoogleNews
 ip2geotools
 psycopg2
-
+tensorflow
