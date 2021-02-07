@@ -11,6 +11,10 @@ import psycopg2
 import pandas as pd
 #Text cleaning
 from text_cleaner import text_cleaner
+import sys
+
+
+from predict_against_model import load_model, load_vocabulary, predict_results
 
 
 #NTLK
@@ -20,7 +24,7 @@ from nltk.stem import WordNetLemmatizer # Lemmatization
 import re, string #Text cleaning
 
 
-
+#print(("<b>Current Python Version Used:</b> Python " +  sys.version.split('(')[0].strip()))
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -82,7 +86,7 @@ def test():
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
-        response = DbIpCity.get('', api_key='free')
+        response = DbIpCity.get('00.000.51.115', api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
 
@@ -166,7 +170,7 @@ def test():
             hash.append(hex_dig)
         
         #model input. Dataframe containing article content
-        uncleansed_data = pd.DataFrame({'content':article_text}) 
+        '''uncleansed_data = pd.DataFrame({'content':article_text}) 
         print(uncleansed_data)
         uncleansed_data['simple_clean'] = text_cleaner(uncleansed_data['content'])
         print(uncleansed_data)
@@ -181,12 +185,33 @@ def test():
         uncleansed_data['lemming_clean'] =  text_cleaner(uncleansed_data['stopwords_clean'],
                           SIMPLE = False,
                           LEMMING = LEMMING)
-        print(uncleansed_data)
+        print(uncleansed_data)'''
 
+        #Clean Text 
+        cleaned_text = []
+        for item in article_text:    
+            cleanse = text_cleaner(item)
+            cleanse2 = cleanse.pop()
+            print(cleanse2)
+            cleaned_text.append(cleanse2)
+        print(cleaned_text)
 
-        #PLUG MODEL IN HERE
+        model_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\models\content_Transformer_model'
+        vocabulary_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\Data\word_frequency\content_word_map_dict.json'
+
+        model = load_model(model_path)
+        vocab = load_vocabulary(vocabulary_path)
+
+        #Model Prediction based on cleaned text
+        model_results = []
+        for text in cleaned_text:   
+            prediction = predict_results(text,model,vocab)
+            #remove nested list
+            prediction_pop = list(prediction).pop()
+            scaled_prediction = (prediction_pop * 50 ) + 50
+            model_results.append(list(scaled_prediction).pop())
             
-    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash)) 
+    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
 
 
 @app.route('/result', methods=["GET", "POST"])
