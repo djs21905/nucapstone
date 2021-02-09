@@ -5,7 +5,7 @@
 <!-- Example row of columns -->
 <div class="container ">
   <div class="row ">
-    {%for titles1,outlet1,date1,links1,img1,hash,model_results in keywordprocess%} 
+    {%for titles1,outlet1,date1,links1,img1,hash,model_results,bar in keywordprocess%} 
     <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
       <h4>{{titles1}}</h4>
       <a href="{{links1}}"><img src= {{img1}} alt="Image Not Found" onerror=this.src="https://image.freepik.com/free-vector/breaking-news-template_23-2148507392.jpg" style="width:300px;height:200px;" title="{{outlet1}}"> </a>
@@ -20,8 +20,11 @@
     </div>
     {%else%}
     <div class="progress">
-    <div class="progress-bar bg-info" style="width:{{model_results}}%"></div>
+    <div class="progress-bar bg-info" style="width:{{bar}}%"></div>
+    <div class="progress-bar bg-danger" role="progressbar" style="width:{{model_results}}%">
     </div>
+    </div>
+
     {% endif %}
     <!-- voting system -->
     <br>

@@ -177,12 +177,18 @@ def result():
         model_results = []
         for text in cleaned_text:   
             prediction = predict_results(text,model,vocab)
+            print(prediction)
             #remove nested list
             prediction_pop = list(prediction).pop()
             scaled_prediction = (prediction_pop * 50 ) + 50
             model_results.append(list(scaled_prediction).pop())
+        
+        bar = []
+        for item in model_results:
+            bar.append(100-item)
+
             
-    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
+    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results,bar)) 
 
 @app.route('/vote', methods=["GET", "POST"])
 def vote():
