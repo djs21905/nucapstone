@@ -24,9 +24,6 @@ from nltk.stem.porter import PorterStemmer #Stemming
 from nltk.stem import WordNetLemmatizer # Lemmatization
 import re, string #Text cleaning
 
-
-#print(("<b>Current Python Version Used:</b> Python " +  sys.version.split('(')[0].strip()))
-
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -41,9 +38,6 @@ def hello():
     googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
     googlenews.search('news')
     result=googlenews.result()
-    print(len(result))
-
-
     trun = result[0:3]
 
     titles = []
@@ -62,12 +56,7 @@ def hello():
         article.parse()
         img.append(article.top_image)
     
-
-
     return render_template('hello.html',result= zip(titles,outlet,date,links,img)) 
-
-
-
 
 @app.route('/test', methods=["GET", "POST"])
 def test():
@@ -79,7 +68,6 @@ def test():
     hash = []
     article_text = []
 
-    
     STOPWORDS = stopwords.words('english')
     STOPWORDS = [word.translate(str.maketrans('','',string.punctuation)) for word in STOPWORDS] # 
     LEMMING =  WordNetLemmatizer()
@@ -98,7 +86,6 @@ def test():
         cur = con.cursor()
 
         print('DB connection successful ')
-        region = response.region
 
         postgres_insert_query = """ INSERT INTO info (ip, url, location) VALUES (%s,%s,%s)"""
         record_to_insert = (str(request.remote_addr), param1, str(response.region))
@@ -106,7 +93,6 @@ def test():
 
         con.commit()
         con.close()
-
 
         regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         if regex.match(param1):
@@ -131,18 +117,12 @@ def test():
             googlenews.search(param1)
             result=googlenews.result()
 
-            
-          
-         
-
-            
-            # keyword process flow 
+            # Handling of Keywords
             if len(result) <= 6:
                 trun = result[0:]
             else:
                 trun = result[0:6]
 
-            print(len(trun))
             for item in trun:
                 try:
                     titles1.append(item['title'])
@@ -169,35 +149,14 @@ def test():
             hash_object = hashlib.sha1(item.encode('utf-8'))
             hex_dig = hash_object.hexdigest()  
             hash.append(hex_dig)
-        
-        #model input. Dataframe containing article content
-        '''uncleansed_data = pd.DataFrame({'content':article_text}) 
-        print(uncleansed_data)
-        uncleansed_data['simple_clean'] = text_cleaner(uncleansed_data['content'])
-        print(uncleansed_data)
-
-        # add stopword clean
-        uncleansed_data['stopwords_clean'] =  text_cleaner(uncleansed_data['simple_clean'],
-                          SIMPLE = False,
-                          STOPWORDS = STOPWORDS)
-
-        print(uncleansed_data)
-        # add lemming clean 
-        uncleansed_data['lemming_clean'] =  text_cleaner(uncleansed_data['stopwords_clean'],
-                          SIMPLE = False,
-                          LEMMING = LEMMING)
-        print(uncleansed_data)'''
 
         #Clean Text 
         cleaned_text = []
         for item in article_text:    
             cleanse = text_cleaner(item)
             cleanse2 = cleanse.pop()
-            print(cleanse2)
             cleaned_text.append(cleanse2)
-        print(cleaned_text)
-
-        print(os.getcwd())
+        
         model_path = os.getcwd() + r'\Documents\GitHub\nucapstone\myrepolib\Models\content_Transformer_model'
         vocabulary_path = os.getcwd() + r'\Documents\GitHub\nucapstone\myrepolib\Data\word_frequency\content_word_map_dict.json'
 
@@ -214,7 +173,6 @@ def test():
             model_results.append(list(scaled_prediction).pop())
             
     return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
-
 
 @app.route('/result', methods=["GET", "POST"])
 def result():
@@ -237,9 +195,6 @@ def result():
                 fail = True
                 message = 'You already voted for this article. You can only vote once per article.'
                 pass  
-        #elif request.form['vote'] == 'Middle':
-            #a = 'middle'
-            #message = 'You agreed with our models ranking. Thanks for the input.'
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
             try:
@@ -253,12 +208,8 @@ def result():
                 pass
         con.commit()
         con.close()    
-     
-     
 
     return render_template('vote.html',test=a,message=message,fail = fail) 
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
