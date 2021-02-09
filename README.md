@@ -7,7 +7,7 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
--add a message if the search doesnt return anything (redirect to default html?).<br>
+
 -look into parallel processing.<br>
 
 
@@ -36,6 +36,7 @@ Northwestern Capstone Project
 <br> -connect model to backend. <br>
 -deploy model and app to vpc. Create postgres db in AWS. <br> (2/1/2021)
 - fix spelling of apertureAI on footer. <br>
+-add a message if the search doesnt return anything (redirect to default html?).<br>
 
 
 
