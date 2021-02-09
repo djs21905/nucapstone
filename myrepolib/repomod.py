@@ -87,7 +87,7 @@ def test():
     if request.method == 'POST':
 
         param1 =  request.form['Param1']
-        response = DbIpCity.get('00.000.51.115', api_key='free')
+        response = DbIpCity.get('73.30.188.56', api_key='free')
         print(request.remote_addr,param1,response.country,response.region)
 
 
@@ -197,8 +197,9 @@ def test():
             cleaned_text.append(cleanse2)
         print(cleaned_text)
 
-        model_path = os.getcwd() + '\models\content_Transformer_model'
-        vocabulary_path = os.getcwd() + '\Data\word_frequency\content_word_map_dict.json'
+        print(os.getcwd())
+        model_path = os.getcwd() + r'\Documents\GitHub\nucapstone\myrepolib\Models\content_Transformer_model'
+        vocabulary_path = os.getcwd() + r'\Documents\GitHub\nucapstone\myrepolib\Data\word_frequency\content_word_map_dict.json'
 
         model = load_model(model_path)
         vocab = load_vocabulary(vocabulary_path)
