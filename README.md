@@ -9,7 +9,8 @@ Northwestern Capstone Project
 <br>
 -add a message if the search doesnt return anything.<br>
 -connect model to backend. <br>
---add andrew to security group on aws 
+--add andrew to security group on aws <br>
+- fix spelling of apertureAI on footer. <br>
 
 
 
