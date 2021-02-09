@@ -122,7 +122,9 @@ def result():
             result=googlenews.result()
 
             # Handling of Keywords
-            if len(result) <= 6:
+            if len(result) == 0:
+                return render_template("nothingfound.html")
+            elif len(result) <= 6:
                 trun = result[0:]
             else:
                 trun = result[0:6]
