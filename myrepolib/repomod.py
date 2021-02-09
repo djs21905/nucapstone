@@ -52,11 +52,14 @@ def home():
         date.append(item['date'])
         links.append(item['link'])
         url  = item['link']
-        article = Article(url)
-        article.download()
-        article.parse()
-        img.append(article.top_image)
-    
+        try:
+            article = Article(url)
+            article.download()
+            article.parse()
+            img.append(article.top_image)
+        except:
+            img.append('')
+        
     return render_template('home.html',result= zip(titles,outlet,date,links,img)) 
 
 @app.route('/result', methods=["GET", "POST"])
@@ -122,7 +125,10 @@ def result():
             result=googlenews.result()
 
             # Handling of Keywords
-            if len(result) <= 6:
+            print(len(result))
+            if len(result) == 0:
+                return render_template("nothingfound.html")
+            elif len(result) <= 6:
                 trun = result[0:]
             else:
                 trun = result[0:6]
