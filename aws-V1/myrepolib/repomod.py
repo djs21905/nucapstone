@@ -12,6 +12,8 @@ import pandas as pd
 #Text cleaning
 from text_cleaner import text_cleaner
 import sys
+import os
+import tensorflow as tf
 
 
 from predict_against_model import load_model, load_vocabulary, predict_results
@@ -23,12 +25,15 @@ from nltk.stem.porter import PorterStemmer #Stemming
 from nltk.stem import WordNetLemmatizer # Lemmatization
 import re, string #Text cleaning
 
+print(os.getcwd())
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 #print(("<b>Current Python Version Used:</b> Python " +  sys.version.split('(')[0].strip()))
-
+os.chdir(os.getcwd())
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
+print(os.getcwd())
 
 app = Flask(__name__)
 
@@ -91,7 +96,7 @@ def test():
 
 
         #establish db connection 
-        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password=northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....')
 
         cur = con.cursor()
@@ -196,11 +201,21 @@ def test():
             cleaned_text.append(cleanse2)
         print(cleaned_text)
 
-        model_path = 'models\content_Transformer_model'
-        vocabulary_path = 'Data\word_frequency\content_word_map_dict.json'
-
-        model = load_model(model_path)
-        vocab = load_vocabulary(vocabulary_path)
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '-1'
+        tf.saved_model.LoadOptions(
+             experimental_io_device=None
+                )
+        os.chdir(os.getcwd())
+        print(os.getcwd())
+        model_path = os.getcwd() + '/Models/content_Transformer_model'
+        vocabulary_path = os.getcwd() +'/Data/word_frequency/content_word_map_dict.json'
+        print(model_path)
+        print(vocabulary_path)
+        with tf.device('/cpu:0'):
+             model = load_model(model_path)
+             vocab = load_vocabulary(vocabulary_path)
+        #model = load_model(model_path)
+        
 
         #Model Prediction based on cleaned text
         model_results = []
@@ -219,7 +234,7 @@ def result():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
         print(hash_id)
-        con = psycopg2.connect("dbname=postgres user=postgres password= host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password= northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....') 
         cur = con.cursor()
         print('DB connection successful ')
