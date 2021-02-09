@@ -7,10 +7,10 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
--add a message if the search doesnt return anything.<br>
--connect model to backend. <br>
---add andrew to security group on aws <br>
-- fix spelling of apertureAI on footer. <br>
+-add a message if the search doesnt return anything (redirect to default html?).<br>
+-look into parallel processing.<br>
+
+
 
 
 
@@ -32,9 +32,10 @@ Northwestern Capstone Project
 <br>
 -add tooltip to consrvative liberal buttons that explains meaning to users <br>
 <br>
--db functioning. Added date/time and isurl columns(2/1/2021) <br> 
+-db functioning. Added date/time and isurl columns(2/1/2021) 
+<br> -connect model to backend. <br>
 -deploy model and app to vpc. Create postgres db in AWS. <br> (2/1/2021)
-
+- fix spelling of apertureAI on footer. <br>
 
 
 
