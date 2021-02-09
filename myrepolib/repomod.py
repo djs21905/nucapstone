@@ -12,6 +12,7 @@ import pandas as pd
 #Text cleaning
 from text_cleaner import text_cleaner
 import sys
+import os
 
 
 from predict_against_model import load_model, load_vocabulary, predict_results
@@ -196,8 +197,8 @@ def test():
             cleaned_text.append(cleanse2)
         print(cleaned_text)
 
-        model_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\models\content_Transformer_model'
-        vocabulary_path = r'C:\Users\Dan\Downloads\nucapstone-main (9)\nucapstone-main\myrepolib\Data\word_frequency\content_word_map_dict.json'
+        model_path = os.getcwd() + '\models\content_Transformer_model'
+        vocabulary_path = os.getcwd() + '\Data\word_frequency\content_word_map_dict.json'
 
         model = load_model(model_path)
         vocab = load_vocabulary(vocabulary_path)
