@@ -54,12 +54,13 @@
 <!-- Example row of columns -->
 <div class="container">
   <div class="row">
-    {%for titles1,outlet1,date1,links1,img1,hash in keywordprocess%} 
+    {%for titles1,outlet1,date1,links1,img1,hash,model_results in keywordprocess%} 
     <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
       <h4>{{titles1}}</h4>
       <a href="{{links1}}"><img src= {{img1}} alt="Image Not Found" onerror=this.src="https://image.freepik.com/free-vector/breaking-news-template_23-2148507392.jpg" style="width:300px;height:200px;" title="{{outlet1}}"> </a>
       <p><b>{{outlet1}}</b></p>
       <p><i>{{date1}}</i></p>
+      <p>{{model_results}}</p>
 <!-- Conservativer vs liberal bar -->
     {% if color == 0 %}
     <div class="progress">
@@ -68,7 +69,7 @@
     </div>
     {%else%}
     <div class="progress">
-    <div class="progress-bar bg-info" style="width:30%"></div>
+    <div class="progress-bar bg-info" style="width:{{model_results}}%"></div>
     </div>
     {% endif %}
     <!-- voting system -->
