@@ -76,9 +76,7 @@ def test():
 
         param1 =  request.form['Param1']
         response = DbIpCity.get('73.30.188.56', api_key='free')
-        print(request.remote_addr,param1,response.country,response.region)
-
-
+        
         #establish db connection 
         con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....')
