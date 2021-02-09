@@ -7,8 +7,8 @@ Northwestern Capstone Project
 <br>
 -URLs are having trouble returning the time an article was posted.  
 <br>
--add a message if the search doesnt return anything.<br>
-
+-add a message if the search doesnt return anything (redirect to default html?).<br>
+-look into parallel processing.<br>
 
 
 
