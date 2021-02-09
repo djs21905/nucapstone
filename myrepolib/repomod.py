@@ -13,6 +13,7 @@ import pandas as pd
 from text_cleaner import text_cleaner
 import sys
 import os
+import datetime
 
 
 from predict_against_model import load_model, load_vocabulary, predict_results
@@ -31,7 +32,7 @@ nltk.download('wordnet')
 app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
-def hello():
+def home():
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
@@ -59,7 +60,7 @@ def hello():
     return render_template('home.html',result= zip(titles,outlet,date,links,img)) 
 
 @app.route('/result', methods=["GET", "POST"])
-def test():
+def result():
     titles1 = []
     outlet1 = [] 
     date1 = []
@@ -76,7 +77,7 @@ def test():
 
         param1 =  request.form['Param1']
         response = DbIpCity.get('73.30.188.56', api_key='free')
-
+        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         #establish db connection 
         con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....')
@@ -85,14 +86,19 @@ def test():
 
         print('DB connection successful ')
 
-        postgres_insert_query = """ INSERT INTO info (ip, url, location) VALUES (%s,%s,%s)"""
-        record_to_insert = (str(request.remote_addr), param1, str(response.region))
+        if regex.match(param1):
+            isurl = True
+        else:
+            isurl = False
+
+        postgres_insert_query = """ INSERT INTO info (ip, url, location, date,time,isurl) VALUES (%s,%s,%s,%s,%s,%s)"""
+        record_to_insert = (str(request.remote_addr), param1, str(response.region),datetime.datetime.now(),datetime.datetime.now().time(),isurl)
         cur.execute(postgres_insert_query, record_to_insert)
 
         con.commit()
         con.close()
 
-        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+        
         if regex.match(param1):
             article = Article(param1)
             article.download()
@@ -173,7 +179,7 @@ def test():
     return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
 
 @app.route('/vote', methods=["GET", "POST"])
-def result():
+def vote():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
         print(hash_id)
@@ -185,8 +191,8 @@ def result():
         if request.form['vote'] == 'Liberal':
             a = 'liberal'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 1,0,hash_id)
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 1,0,hash_id,datetime.datetime.now(),datetime.datetime.now().time())
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more liberal than our model ranking. Thanks for the input.'
             except:
@@ -196,8 +202,8 @@ def result():
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id))
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id),datetime.datetime.now(),datetime.datetime.now().time())
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more conservative than our model ranking. Thanks for the input.'
             except:
