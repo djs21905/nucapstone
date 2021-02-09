@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          {%for titles,outlet,date,links,img in result%} 
+          <div class="col-md-4" style = " border-style: solid; border-color:rgb(247, 249, 255);">
+            <h4>{{titles}}</h4>
+            <a href="{{links}}"><img src= {{img}} style="width:300px;height:200px;" title="{{outlet}}"> </a>
+            <p><b>{{outlet}}</b></p>
+            <p><i>{{date}}</i></p>
+            <p><a class="btn btn-secondary" href='{{links}}' role="button">View article &raquo;</a></p>
+          </div>
+          {% endfor %} 
+        </div>
+
+{% endblock %}

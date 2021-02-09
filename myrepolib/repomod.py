@@ -56,9 +56,9 @@ def hello():
         article.parse()
         img.append(article.top_image)
     
-    return render_template('hello.html',result= zip(titles,outlet,date,links,img)) 
+    return render_template('home.html',result= zip(titles,outlet,date,links,img)) 
 
-@app.route('/test', methods=["GET", "POST"])
+@app.route('/result', methods=["GET", "POST"])
 def test():
     titles1 = []
     outlet1 = [] 
@@ -76,7 +76,7 @@ def test():
 
         param1 =  request.form['Param1']
         response = DbIpCity.get('73.30.188.56', api_key='free')
-        
+
         #establish db connection 
         con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
         print('Connecting to PostgreSQL db.....')
@@ -170,9 +170,9 @@ def test():
             scaled_prediction = (prediction_pop * 50 ) + 50
             model_results.append(list(scaled_prediction).pop())
             
-    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
+    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
 
-@app.route('/result', methods=["GET", "POST"])
+@app.route('/vote', methods=["GET", "POST"])
 def result():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
