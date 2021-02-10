@@ -33,6 +33,19 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+    #visitor table 
+    con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
+    cur = con.cursor()
+    response = DbIpCity.get('73.30.188.56', api_key='free')
+    postgres_insert_query = """ INSERT INTO visitor (ip, location, date,time) VALUES (%s,%s,%s,%s)"""
+    record_to_insert = (str(request.remote_addr), str(response.region),datetime.datetime.now(),datetime.datetime.now().time())
+    cur.execute(postgres_insert_query, record_to_insert)
+
+    con.commit()
+    con.close()
+
+
+
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
