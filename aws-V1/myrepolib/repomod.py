@@ -33,6 +33,18 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+    #visitor table 
+    con = psycopg2.connect("dbname=postgres user=postgres password=northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+    cur = con.cursor()
+    response = DbIpCity.get(str(request.remote_addr), api_key='free')
+    postgres_insert_query = """ INSERT INTO visitor (ip, location, date,time) VALUES (%s,%s,%s,%s)"""
+    record_to_insert = (str(request.remote_addr), str(response.region),datetime.datetime.now(),datetime.datetime.now().time())
+    cur.execute(postgres_insert_query, record_to_insert)
+
+    con.commit()
+    con.close()
+
+
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
@@ -180,8 +192,13 @@ def result():
             prediction_pop = list(prediction).pop()
             scaled_prediction = (prediction_pop * 50 ) + 50
             model_results.append(list(scaled_prediction).pop())
+        
+        bar = []
+        for item in model_results:
+            bar.append(100-item)
+
             
-    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
+    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results,bar)) 
 
 @app.route('/vote', methods=["GET", "POST"])
 def vote():
