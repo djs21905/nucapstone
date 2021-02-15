@@ -33,6 +33,19 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+    #visitor table 
+    con = psycopg2.connect("dbname=postgres user=postgres password=admin host=localhost port=5432")
+    cur = con.cursor()
+    response = DbIpCity.get('73.30.188.56', api_key='free')
+    postgres_insert_query = """ INSERT INTO visitor (ip, location, date,time) VALUES (%s,%s,%s,%s)"""
+    record_to_insert = (str(request.remote_addr), str(response.region),datetime.datetime.now(),datetime.datetime.now().time())
+    cur.execute(postgres_insert_query, record_to_insert)
+
+    con.commit()
+    con.close()
+
+
+
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
@@ -52,11 +65,14 @@ def home():
         date.append(item['date'])
         links.append(item['link'])
         url  = item['link']
-        article = Article(url)
-        article.download()
-        article.parse()
-        img.append(article.top_image)
-    
+        try:
+            article = Article(url)
+            article.download()
+            article.parse()
+            img.append(article.top_image)
+        except:
+            img.append('')
+        
     return render_template('home.html',result= zip(titles,outlet,date,links,img)) 
 
 @app.route('/result', methods=["GET", "POST"])
@@ -122,7 +138,10 @@ def result():
             result=googlenews.result()
 
             # Handling of Keywords
-            if len(result) <= 6:
+            print(len(result))
+            if len(result) == 0:
+                return render_template("nothingfound.html")
+            elif len(result) <= 6:
                 trun = result[0:]
             else:
                 trun = result[0:6]
@@ -171,12 +190,18 @@ def result():
         model_results = []
         for text in cleaned_text:   
             prediction = predict_results(text,model,vocab)
+            print(prediction)
             #remove nested list
             prediction_pop = list(prediction).pop()
             scaled_prediction = (prediction_pop * 50 ) + 50
             model_results.append(list(scaled_prediction).pop())
+        
+        bar = []
+        for item in model_results:
+            bar.append(100-item)
+
             
-    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
+    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results,bar)) 
 
 @app.route('/vote', methods=["GET", "POST"])
 def vote():

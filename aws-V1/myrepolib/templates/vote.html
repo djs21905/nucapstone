@@ -1,51 +1,7 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% extends "base.html" %}
 
+{% block content %}
 
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
-
-  
-
-  <style>
-    .jumbotron {
-      background-color: rgb(255, 255, 255); 
-    }
-    </style>
-    </head>
-
-  <body class="text-center">
-    
-     
-    <div class="cover-container d-flex h-20 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto"><div class="jumbotron">
-        <div class="inner">
-            
-          <a href="/"> <img src="https://i.ibb.co/TrNwvrh/logo.png"> </a>
-        </div>
-        </div>
-      </header>
-      
-
-      <main role="main" class="inner cover" >
-        <p class="lead">
-
-          <form method="POST" action="/test">
-            <div class="form-group">
-                <input type="string" class="form-control" id="Param1" name="Param1" placeholder="Input news article URL or keyword here.">
-                <br>
-                <input class = "btn btn-primary" type="submit" value="SUBMIT">
-            </div>
-        </form>
-    </p>
-  </main>
-  
 
       {% if fail is sameas true %}
       <div class="alert alert-danger">
@@ -53,30 +9,9 @@
       </div>
       {%else%}
       <div class="alert alert-info">
-      
         <p> <b>{{message}}</b></p>
-
       </div>
       {%endif%}
 
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <br>
-          <br>
-          <p>Aperature.AI <a href="https://sps.northwestern.edu/masters/data-science/curriculum-specializations.php">Northwestern University</a>, by <a href="">Team 54</a>.</p>
-        </div>
-      </footer>
-    </div>
 
-
-    
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-  </body>
-</html>
+{% endblock %}

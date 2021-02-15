@@ -13,8 +13,8 @@ import pandas as pd
 from text_cleaner import text_cleaner
 import sys
 import os
+import datetime
 import tensorflow as tf
-
 
 from predict_against_model import load_model, load_vocabulary, predict_results
 
@@ -25,29 +25,32 @@ from nltk.stem.porter import PorterStemmer #Stemming
 from nltk.stem import WordNetLemmatizer # Lemmatization
 import re, string #Text cleaning
 
-print(os.getcwd())
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-
-#print(("<b>Current Python Version Used:</b> Python " +  sys.version.split('(')[0].strip()))
-os.chdir(os.getcwd())
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
-print(os.getcwd())
 
 app = Flask(__name__)
 
 @app.route('/', methods=["GET", "POST"])
-def hello():
+def home():
+    #visitor table 
+    con = psycopg2.connect("dbname=postgres user=postgres password=northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+    cur = con.cursor()
+    response = DbIpCity.get(str(request.remote_addr), api_key='free')
+    postgres_insert_query = """ INSERT INTO visitor (ip, location, date,time) VALUES (%s,%s,%s,%s)"""
+    record_to_insert = (str(request.remote_addr), str(response.region),datetime.datetime.now(),datetime.datetime.now().time())
+    cur.execute(postgres_insert_query, record_to_insert)
+
+    con.commit()
+    con.close()
+
+
     user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
     config = Config()
     config.browser_user_agent = user_agent
     googlenews=GoogleNews(start=time.strftime("%m/%d/%Y"),end= time.strftime("%m/%d/%Y"))
     googlenews.search('news')
     result=googlenews.result()
-    print(len(result))
-
-
     trun = result[0:3]
 
     titles = []
@@ -66,15 +69,10 @@ def hello():
         article.parse()
         img.append(article.top_image)
     
+    return render_template('home.html',result= zip(titles,outlet,date,links,img)) 
 
-
-    return render_template('hello.html',result= zip(titles,outlet,date,links,img)) 
-
-
-
-
-@app.route('/test', methods=["GET", "POST"])
-def test():
+@app.route('/result', methods=["GET", "POST"])
+def result():
     titles1 = []
     outlet1 = [] 
     date1 = []
@@ -83,7 +81,6 @@ def test():
     hash = []
     article_text = []
 
-    
     STOPWORDS = stopwords.words('english')
     STOPWORDS = [word.translate(str.maketrans('','',string.punctuation)) for word in STOPWORDS] # 
     LEMMING =  WordNetLemmatizer()
@@ -92,9 +89,7 @@ def test():
 
         param1 =  request.form['Param1']
         response = DbIpCity.get(str(request.remote_addr), api_key='free')
-        print(request.remote_addr,param1,response.country,response.region)
-
-
+        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
         #establish db connection 
         con = psycopg2.connect("dbname=postgres user=postgres password=northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....')
@@ -102,17 +97,20 @@ def test():
         cur = con.cursor()
 
         print('DB connection successful ')
-        region = response.region
 
-        postgres_insert_query = """ INSERT INTO info (ip, url, location) VALUES (%s,%s,%s)"""
-        record_to_insert = (str(request.remote_addr), param1, str(response.region))
+        if regex.match(param1):
+            isurl = True
+        else:
+            isurl = False
+
+        postgres_insert_query = """ INSERT INTO info (ip, url, location, date,time,isurl) VALUES (%s,%s,%s,%s,%s,%s)"""
+        record_to_insert = (str(request.remote_addr), param1, str(response.region),datetime.datetime.now(),datetime.datetime.now().time(),isurl)
         cur.execute(postgres_insert_query, record_to_insert)
 
         con.commit()
         con.close()
 
-
-        regex = re.compile("((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*")
+        
         if regex.match(param1):
             article = Article(param1)
             article.download()
@@ -135,18 +133,14 @@ def test():
             googlenews.search(param1)
             result=googlenews.result()
 
-            
-          
-         
-
-            
-            # keyword process flow 
-            if len(result) <= 6:
+            # Handling of Keywords
+            if len(result) == 0:
+                return render_template("nothingfound.html")
+            elif len(result) <= 6:
                 trun = result[0:]
             else:
                 trun = result[0:6]
 
-            print(len(trun))
             for item in trun:
                 try:
                     titles1.append(item['title'])
@@ -173,49 +167,22 @@ def test():
             hash_object = hashlib.sha1(item.encode('utf-8'))
             hex_dig = hash_object.hexdigest()  
             hash.append(hex_dig)
-        
-        #model input. Dataframe containing article content
-        '''uncleansed_data = pd.DataFrame({'content':article_text}) 
-        print(uncleansed_data)
-        uncleansed_data['simple_clean'] = text_cleaner(uncleansed_data['content'])
-        print(uncleansed_data)
-
-        # add stopword clean
-        uncleansed_data['stopwords_clean'] =  text_cleaner(uncleansed_data['simple_clean'],
-                          SIMPLE = False,
-                          STOPWORDS = STOPWORDS)
-
-        print(uncleansed_data)
-        # add lemming clean 
-        uncleansed_data['lemming_clean'] =  text_cleaner(uncleansed_data['stopwords_clean'],
-                          SIMPLE = False,
-                          LEMMING = LEMMING)
-        print(uncleansed_data)'''
 
         #Clean Text 
         cleaned_text = []
         for item in article_text:    
             cleanse = text_cleaner(item)
             cleanse2 = cleanse.pop()
-            print(cleanse2)
             cleaned_text.append(cleanse2)
-        print(cleaned_text)
-
+        
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '-1'
-        tf.saved_model.LoadOptions(
-             experimental_io_device=None
-                )
+        tf.saved_model.LoadOptions(experimental_io_device=None)
         os.chdir(os.getcwd())
-        print(os.getcwd())
         model_path = os.getcwd() + '/Models/content_Transformer_model'
         vocabulary_path = os.getcwd() +'/Data/word_frequency/content_word_map_dict.json'
-        print(model_path)
-        print(vocabulary_path)
         with tf.device('/cpu:0'):
              model = load_model(model_path)
              vocab = load_vocabulary(vocabulary_path)
-        #model = load_model(model_path)
-        
 
         #Model Prediction based on cleaned text
         model_results = []
@@ -225,16 +192,20 @@ def test():
             prediction_pop = list(prediction).pop()
             scaled_prediction = (prediction_pop * 50 ) + 50
             model_results.append(list(scaled_prediction).pop())
+        
+        bar = []
+        for item in model_results:
+            bar.append(100-item)
+
             
-    return render_template('test.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results)) 
+    return render_template('result.html',  keywordprocess = zip(titles1,outlet1,date1,links1,img1,hash,model_results,bar)) 
 
-
-@app.route('/result', methods=["GET", "POST"])
-def result():
+@app.route('/vote', methods=["GET", "POST"])
+def vote():
     if request.method == 'POST':
         hash_id = request.form.get('pk')
         print(hash_id)
-        con = psycopg2.connect("dbname=postgres user=postgres password= northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
+        con = psycopg2.connect("dbname=postgres user=postgres password=northwesternmsds host=potsgres.cv4el6jr6eml.us-east-1.rds.amazonaws.com port=5432")
         print('Connecting to PostgreSQL db.....') 
         cur = con.cursor()
         print('DB connection successful ')
@@ -242,22 +213,19 @@ def result():
         if request.form['vote'] == 'Liberal':
             a = 'liberal'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 1,0,hash_id)
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 1,0,hash_id,datetime.datetime.now(),datetime.datetime.now().time())
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more liberal than our model ranking. Thanks for the input.'
             except:
                 fail = True
                 message = 'You already voted for this article. You can only vote once per article.'
                 pass  
-        #elif request.form['vote'] == 'Middle':
-            #a = 'middle'
-            #message = 'You agreed with our models ranking. Thanks for the input.'
         elif request.form['vote'] == 'Conservative':
             a = 'conservative'
             try:
-                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash) VALUES (%s,%s,%s,%s)"""
-                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id))
+                postgres_insert_query = """ INSERT INTO voting (ip, liberal, conservative,hash,date,time) VALUES (%s,%s,%s,%s,%s,%s)"""
+                record_to_insert = (str(request.remote_addr), 0,1,str(hash_id),datetime.datetime.now(),datetime.datetime.now().time())
                 cur.execute(postgres_insert_query, record_to_insert)
                 message = 'You voted that the article should be rated as more conservative than our model ranking. Thanks for the input.'
             except:
@@ -266,14 +234,8 @@ def result():
                 pass
         con.commit()
         con.close()    
-     
-     
 
     return render_template('vote.html',test=a,message=message,fail = fail) 
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port= 8080)
