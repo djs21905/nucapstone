@@ -31,6 +31,13 @@ nltk.download('wordnet')
 
 app = Flask(__name__)
 
+
+@app.route('/dashboard', methods=["GET", "POST"])
+def dashboard():
+
+    return render_template('dashboard.html') 
+
+
 @app.route('/', methods=["GET", "POST"])
 def home():
     #visitor table 
